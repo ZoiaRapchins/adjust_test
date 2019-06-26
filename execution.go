@@ -1,6 +1,8 @@
 package main
 
-func ExecuteRequests(cmdArgs CmdArguments, displayFunction displayResponseType) {
+type ExecuteRequestType func(url string, finished chan<- bool)
+
+func ExecuteRequests(cmdArgs CmdArguments, executeRequestType ExecuteRequestType) {
 	numberOfRunningJobs := cmdArgs.NumberOfParallelRequest
 	finished := make(chan bool, numberOfRunningJobs)
 	for i := 0; i < numberOfRunningJobs; i++ {
@@ -10,7 +12,7 @@ func ExecuteRequests(cmdArgs CmdArguments, displayFunction displayResponseType) 
 		}
 		url := cmdArgs.Urls[len(cmdArgs.Urls)-1]
 		cmdArgs.Urls = cmdArgs.Urls[:len(cmdArgs.Urls)-1]
-		go DoGetRequest(url, finished, displayFunction)
+		go executeRequestType(url, finished)
 	}
 
 	for i := 0; i < numberOfRunningJobs; i++ {
@@ -23,7 +25,7 @@ func ExecuteRequests(cmdArgs CmdArguments, displayFunction displayResponseType) 
 			numberOfRunningJobs = numberOfRunningJobs + 1
 			url := cmdArgs.Urls[len(cmdArgs.Urls)-1]
 			cmdArgs.Urls = cmdArgs.Urls[:len(cmdArgs.Urls)-1]
-			go DoGetRequest(url, finished, displayFunction)
+			go executeRequestType(url, finished)
 		}
 	}
 }

@@ -12,5 +12,9 @@ func main() {
 		fmt.Printf("%s %x\n", url, md5Response)
 	}
 
-	ExecuteRequests(cmdArgs, displayFunction)
+	executeGetRequest := func(url string, finished chan<- bool) {
+		DoGetRequest(url, finished, displayFunction)
+	}
+
+	ExecuteRequests(cmdArgs, executeGetRequest)
 }

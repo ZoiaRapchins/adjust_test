@@ -13,6 +13,7 @@ func DoGetRequest(url string, finished chan<- bool, displayResponse displayRespo
 	response, err := http.Get(url)
 	if err != nil {
 		log.Println(err)
+		finished <- true
 		return
 	}
 
@@ -21,6 +22,7 @@ func DoGetRequest(url string, finished chan<- bool, displayResponse displayRespo
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		log.Println(err)
+		finished <- true
 		return
 	}
 

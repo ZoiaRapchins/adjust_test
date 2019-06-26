@@ -6,7 +6,7 @@ import (
 )
 
 const httpPrefix = "http://"
-const defaultParallelRequests = 10
+const DefaultNumberOfParallelRequests = 10
 
 type CmdArguments struct {
 	Urls                    []string
@@ -14,7 +14,7 @@ type CmdArguments struct {
 }
 
 func ParseArguments(args []string) CmdArguments {
-	requestsNumber := flag.Int("parallel", defaultParallelRequests, "maximum number of requests to run parallel")
+	requestsNumber := flag.Int("parallel", DefaultNumberOfParallelRequests, "maximum number of requests to run parallel")
 
 	flag.CommandLine.Parse(args)
 
